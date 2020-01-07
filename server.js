@@ -4,6 +4,7 @@ const hbs = require("hbs");
 const request = require("request");
 const geocode = require("./geocode");
 const forecast = require("./forecast");
+const port = process.env.PORT || 3000;
 
 const app = express();
 
@@ -88,6 +89,6 @@ app.get("*", (req, res) => {
   });
 });
 
-app.listen(3000, () => {
-  console.log("server is running in port 3000");
+app.listen(port, () => {
+  console.log("server is running in port " + port);
 });
