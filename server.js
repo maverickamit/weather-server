@@ -46,7 +46,7 @@ app.use(express.static(publicDirectory));
 
 app.get("/weather", (req, res) => {
   if (!req.query.address) {
-    res.send({ error });
+    res.send({ error: "You must provide an address!" });
   } else {
     // res.send({ forecast: "It is snowing", location: req.query.address });
     geocode(
@@ -54,18 +54,19 @@ app.get("/weather", (req, res) => {
       (error, { latitude, longitude, location } = {}) => {
         if (error) {
           res.send({ error });
+        } else {
+          forecast(latitude, longitude, (error, forecastData) => {
+            if (error) {
+              res.send({ error });
+            } else {
+              res.send({
+                forecast: forecastData,
+                location,
+                address: req.query.address
+              });
+            }
+          });
         }
-        forecast(latitude, longitude, (error, forecastData) => {
-          if (error) {
-            res.send({ error });
-          } else {
-            res.send({
-              forecast: forecastData,
-              location,
-              address: req.query.address
-            });
-          }
-        });
       }
     );
   }
